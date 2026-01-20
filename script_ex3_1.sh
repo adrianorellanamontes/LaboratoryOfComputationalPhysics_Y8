@@ -4,11 +4,15 @@ mkdir students
 
 # We download file and remane it.
 
-wget "https://www.dropbox.com/scl/fi/bxv17nrbrl83vw6qrkiu9/LCP_22-23_students.csv?rlkey=47fakvatrtif3q3qw4q97p5b7&e=1" -O LCP_22-23_students.csv
+if [ ! -f "students/LCP_22-23_students.csv" ]; then
+    wget "https://www.dropbox.com/s/867rtx3az6e9gm8/LCP_22-23_students.csv" -O "students/LCP_22-23_students.csv";
+else
+    echo "File already exists";
+fi
 
-rm wget-log
+# Now we remove an unnecessary "log..." file that is created.
 
-mv LCP_22-23_students.csv students/
+rm log*
 
 cd students
 
@@ -16,27 +20,25 @@ grep "PoD" LCP_22-23_students.csv > PoD
 
 grep "Physics" LCP_22-23_students.csv > Ph
 
-# Since the students names are in the second column, we have to use: 
+# Since the students surnames are in the first column, we have to use:
 
-for L in {A..Z}; do echo -n "$L: "; cut -d "," -f2 LCP_22-23_students.csv | grep -c "^$L"; done
+for L in {A..Z}; do echo -n "$L: "; cut -d "," -f1 LCP_22-23_students.csv | grep -c "^$L"; done
 
 # On where cut extracts columns (fields) from each line of a file.
 
 # " -d "," " sets the delimiter to a comma because the file is a CSV (comma-separated values), this tells cut “columns are separated by commas”.
 
-# "-f2" means "extract field (column) number 2".
+# "-f1" means "extract field (column) number 1".
 
 max=0;
 letter="";
 
-for L in {A..Z}; do c=$(cut -d "," -f2 LCP_22-23_students.csv | grep -ci "^$L"); 
-if [ $c -gt $max ]; 
-then max=$c; 
-letter=$L; 
-fi; 
+for L in {A..Z}; do c=$(cut -d "," -f2 LCP_22-23_students.csv | grep -ci "^$L");
+if [ $c -gt $max ];
+then max=$c;
+letter=$L;
+fi;
 done;
-
-echo "Letter with most names: $letter ($max)"
 
 # "wc" gives number of lines, number of words, number of bytes and the file name. With -l we select only lines.
 
