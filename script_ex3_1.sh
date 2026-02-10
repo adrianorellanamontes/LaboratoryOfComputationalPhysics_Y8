@@ -33,7 +33,7 @@ for L in {A..Z}; do echo -n "$L: "; cut -d "," -f1 LCP_22-23_students.csv | grep
 max=0;
 letter="";
 
-for L in {A..Z}; do c=$(cut -d "," -f2 LCP_22-23_students.csv | grep -ci "^$L");
+for L in {A..Z}; do c=$(cut -d "," -f1 LCP_22-23_students.csv | grep -ci "^$L");
 if [ $c -gt $max ];
 then max=$c;
 letter=$L;
